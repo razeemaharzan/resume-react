@@ -40,19 +40,6 @@ const StepNavigation: React.FC<{ steps: Step[] }> = ({ steps }) => {
             </ButtonGroup>
             </Row>
 
-            {/* <ButtonGroup className="w-100 mt-3" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                {steps.map((step, index) => (
-                    <Button
-                        key={index}
-                        variant={index === currentStep ? 'primary' : 'outline-primary'}
-                        onClick={() => handleButton(index)}
-                        style={{ flex: 1 }} // Make each button take up equal space
-                    >
-                        {step.title}
-                    </Button>
-                ))}
-            </ButtonGroup> */}
-
             {/* Progressbar with percentage */}
             <ProgressBar
                 className="w-100 mt-3"

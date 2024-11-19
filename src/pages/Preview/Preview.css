@@ -1,0 +1,43 @@
+
+.profile-pic {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.left-column {
+  background-color: #02407d;
+  padding: 20px;
+}
+
+.right-column {
+  padding: 20px;
+}
+
+.section-title {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-top: 20px;
+  background-color: #033759;
+  width: 100%;
+  padding: 12px;
+  color: #ffffff;
+}
+
+.heading-color {
+  color: #033759;
+}
+
+.resume-heading {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-top: 1px solid #c7c7c9;
+  border-bottom: 1px solid #c7c7c9;
+}
+
+.work-history-detail {
+  border-bottom: 1px solid #c7c7c9;
+  margin-bottom: 10px;
+
+}
