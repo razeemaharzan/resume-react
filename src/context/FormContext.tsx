@@ -4,35 +4,33 @@ interface FormData {
   name: string;
   email: string;
   phone: string;
+  role: string;
   linkedIn: string;
   address: Address;
   summary: string;
   skills: Array<string>;
   hobbies: Array<string>;
-  interest: Array<string>;
-  certification: Array<string>;
-  experience: Experience[];
-  education: Education[];
+  interests: Array<string>;
+  certifications: Array<string>;
+  experiences: Experience[];
+  educations: Education[];
 }
 
 interface Address {
-  address: {
-    streetNo: string;
-    city: string
-    state: string;
-    country: string;
 
-  };
+  streetNo: string;
+  city: string
+  state: string;
+  country: string;
+
+
 }
 
 interface Experience {
   position: string,
-  company: {
-    name: string,
-    location: string,
-    workModel: string,
-  },
-  project: [],
+  companyName: string,
+  location: string,
+  workModel: string,
   majorDuties: string,
   achievements: string,
   fromDate: string,
@@ -42,49 +40,54 @@ interface Experience {
 
 interface Education {
 
-  fromDate: string;
-  toDate: string;
-  institution: [
-    {
-      name: string;
-      location: string;
-      degree: string;
-      result: string;
-    }
-  ];
-
-
+  degree: string;
+  fieldOfStudy: string;
+  institution: string;
+  startDate: string;
+  endDate: string;
 }
 
 const intialAddress = {
-  address: {
-    streetNo: '',
-    city: '',
-    state: '',
-    country: '',
-  },
+
+  streetNo: '',
+  city: '',
+  state: '',
+  country: '',
+
 }
+
+const initialEducation = [{
+
+  degree: '',
+  fieldOfStudy: '',
+  institution: '',
+  startDate: '',
+  endDate: ''
+}]
+
 
 const initialFormData = {
   name: '',
   email: '',
   phone: '',
+  role: '',
   linkedIn: '',
   address: intialAddress,
   summary: '',
   skills: [],
   hobbies: [],
-  interest: [],
-  certification: [],
-  experience: [],
-  education: []
+  interests: [],
+  certifications: [],
+  experiences: [],
+  educations: initialEducation
 
 }
 
 
+
 interface FormContextType {
   formData: FormData;
-  updateForm: (key: keyof FormData, value: string) => void;
+  updateForm: (key: keyof FormData, value: any) => void;
   handleSubmit: (event: React.FormEvent) => void;
 }
 
