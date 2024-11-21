@@ -1,20 +1,10 @@
-import ListManager from '../../components/ListManager'
 import { Form, Button, Row, Col } from "react-bootstrap";
-import React, { useState } from 'react';
+import React from 'react';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { addExperience, updateExperience, deleteExperience } from './ExperienceSlice'
+
 interface ExperienceData {
 
-}
-interface ExperienceItem {
-    id: string,
-    companyName: string,
-    location: string,
-    position: string,
-    workModel: string,
-    majorDuties: string,
-    achievements: string,
-    startDate: string,
-    endDate: string,
-    notes: string
 }
 
 enum WorkModel {
@@ -22,32 +12,32 @@ enum WorkModel {
 }
 
 const Experience: React.FC<ExperienceData> = () => {
-    const initialExperience = {
-        id: crypto.randomUUID(), companyName: "", location: "", position: '', workModel: '', majorDuties: '', achievements: '',
-        startDate: '', endDate: '', notes: ''
+    const experiences = useAppSelector((state) => state.experience)
+    const dispatch = useAppDispatch();
+
+
+    const addItem = () => {
+        let item = {
+            id: crypto.randomUUID(), companyName: '', location: '', position: '', workModel: '', majorDuties: '', achievements: '',
+            startDate: '', endDate: '', notes: '', heading: ''
+        };
+        dispatch(addExperience(item));
+
+    }
+
+    const deleteItem = (id: string) => {
+        dispatch(deleteExperience(id));
     };
-    const [listManager] = useState(
-        new ListManager<ExperienceItem>([initialExperience])
-    );
-    const [experiences, setExperiences] = useState<ExperienceItem[]>(listManager.getItems());
 
-    const addExperience = () => {
+    const handleChange = (id: string, e: any) => {
+        // Retrive name and value attribute from element
+        const { name, value } = e.target;
 
-        listManager.addItem(initialExperience);
-        setExperiences(listManager.getItems());
-    }
+        dispatch(updateExperience({
+            id,
+            updatedData: { [name]: value },
+        }));
 
-    const updateExperience = (index: number, key: string, data: string) => {
-
-        listManager.updateItem(index, { [key]: data });
-        setExperiences(listManager.getItems());
-        console.log(listManager.getItems())
-    }
-
-    const deleteExperience = (index: number) => {
-
-        listManager.deleteItem(index);
-        setExperiences(listManager.getItems());
     };
 
     return (
@@ -59,7 +49,7 @@ const Experience: React.FC<ExperienceData> = () => {
                             <h4>Experience - {index + 1}</h4>
                         </Col>
                         <Col md={2} className="d-flex justify-content-end align-items-center">
-                            <Button variant="danger" key={`delete${index}`} onClick={() => deleteExperience(index)}>
+                            <Button variant="danger" key={`delete${index}`} onClick={() => deleteItem(experience.id)}>
                                 Delete
                             </Button>
                         </Col>
@@ -70,8 +60,9 @@ const Experience: React.FC<ExperienceData> = () => {
                                 <Form.Label>Company Name</Form.Label>
                                 <Form.Control
                                     type="text"
+                                    name="companyName"
                                     value={experience.companyName}
-                                    onChange={(e) => updateExperience(index, "companyName", e.target.value)}
+                                    onChange={(e) => handleChange(experience.id, e)}
                                     placeholder="Enter company name"
                                 />
                             </Form.Group>
@@ -82,19 +73,21 @@ const Experience: React.FC<ExperienceData> = () => {
                                 <Form.Label>Location</Form.Label>
                                 <Form.Control
                                     type="text"
+                                    name="location"
                                     value={experience.location}
-                                    onChange={(e) => updateExperience(index, "location", e.target.value)}
+                                    onChange={(e) => handleChange(experience.id, e)}
                                     placeholder="Enter Location"
                                 />
                             </Form.Group>
                         </Col>
                         <Col md={4}>
-                            <Form.Group controlId={`expPosition${index}`}className="mb-3">
+                            <Form.Group controlId={`expPosition${index}`} className="mb-3">
                                 <Form.Label>Position</Form.Label>
                                 <Form.Control
                                     type="text"
+                                    name="position"
                                     value={experience.position}
-                                    onChange={(e) => updateExperience(index, "position", e.target.value)}
+                                    onChange={(e) => handleChange(experience.id, e)}
                                     placeholder="Enter Position"
                                 />
                             </Form.Group>
@@ -106,8 +99,11 @@ const Experience: React.FC<ExperienceData> = () => {
                         <Col md={4}>
                             <Form.Group controlId={`expWorkType${index}`} className="mb-3">
                                 <Form.Label>Work Type</Form.Label>
-                                <Form.Select aria-label="Work Type" value={experience.workModel}
-                                    onChange={(e) => updateExperience(index, "workModel", e.target.value)}>
+                                <Form.Select aria-label="Work Type"
+                                    value={experience.workModel}
+                                    name="workModel"
+                                    onChange={(e) => handleChange(experience.id, e)}
+                                >
                                     <option>Select work type</option>
                                     {Object.values(WorkModel)
                                         .filter((value) => typeof value === "string")
@@ -126,7 +122,8 @@ const Experience: React.FC<ExperienceData> = () => {
                                 <Form.Control
                                     type="date"
                                     value={experience.startDate}
-                                    onChange={(e) => updateExperience(index, "startDate", e.target.value)}
+                                    name="startDate"
+                                    onChange={(e) => handleChange(experience.id, e)}
                                 />
                             </Form.Group>
                         </Col>
@@ -136,7 +133,22 @@ const Experience: React.FC<ExperienceData> = () => {
                                 <Form.Control
                                     type="date"
                                     value={experience.endDate}
-                                    onChange={(e) => updateExperience(index, "endDate", e.target.value)}
+                                    name="startDate"
+                                    onChange={(e) => handleChange(experience.id, e)}
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col md={12}>
+                            <Form.Group className="mb-3" controlId={`expMajorDuties${index}`}>
+                                <Form.Label>Heading</Form.Label>
+                                <Form.Control
+                                    as="textarea" rows={2}
+                                    placeholder="Write about what you did in a sentence. e.g. Project Inovlved (It appears at the top )"
+                                    value={experience.heading}
+                                    name="heading"
+                                    onChange={(e) => handleChange(experience.id, e)}
                                 />
                             </Form.Group>
                         </Col>
@@ -149,7 +161,8 @@ const Experience: React.FC<ExperienceData> = () => {
                                     as="textarea" rows={10}
                                     placeholder="Write major duties"
                                     value={experience.majorDuties}
-                                    onChange={(e) => updateExperience(index, "majorDuties", e.target.value)}
+                                    name="majorDuties"
+                                    onChange={(e) => handleChange(experience.id, e)}
                                 />
                             </Form.Group>
                         </Col>
@@ -161,7 +174,8 @@ const Experience: React.FC<ExperienceData> = () => {
                                     rows={10}
                                     placeholder="Write achievements"
                                     value={experience.achievements}
-                                    onChange={(e) => updateExperience(index, "achievements", e.target.value)}
+                                    name="achievements"
+                                    onChange={(e) => handleChange(experience.id, e)}
                                 />
                             </Form.Group>
                         </Col>
@@ -173,18 +187,20 @@ const Experience: React.FC<ExperienceData> = () => {
                                 <Form.Control
                                     as="textarea"
                                     rows={3}
-                                    placeholder="Write notes"
+                                    placeholder="Write notes (It appears at the bottom)"
                                     value={experience.notes}
-                                    onChange={(e) => updateExperience(index, "notes", e.target.value)}
+                                    name="notes"
+                                    onChange={(e) => handleChange(experience.id, e)}
+
                                 />
                             </Form.Group>
                         </Col>
-
                     </Row>
+                    <hr />
                 </div>
 
             ))}
-            <Button variant="primary" onClick={addExperience}>
+            <Button variant="primary" onClick={addItem}>
                 + Add Experience
             </Button>
         </div>

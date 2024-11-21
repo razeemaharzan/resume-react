@@ -1,9 +1,11 @@
 import UploadPicture from "../../components/UploadPicture";
 import React from "react";
 import { Form, Row, Col } from "react-bootstrap";
-import { useFormContext } from "../../context/FormContext";
 import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { setProfile } from './ProfileSlice';
+
 
 interface ProfileData {
 
@@ -11,12 +13,16 @@ interface ProfileData {
 
 const Profile: React.FC<ProfileData> = () => {
 
-    const { formData, updateForm } = useFormContext();
+    const profile = useAppSelector((state) => state.profile)
+    const dispatch = useAppDispatch();
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        dispatch(setProfile({ [name]: value }));
+    };
 
     const handlePhone = (e: any) => {
-
-        updateForm("phone", e);
-        console.log(formData);
+        dispatch(setProfile({ phone: e }));
     };
 
     return (
@@ -27,8 +33,9 @@ const Profile: React.FC<ProfileData> = () => {
                         <Form.Label>Full Name</Form.Label>
                         <Form.Control
                             type="text"
-                            value={formData.name}
-                            onChange={(e) => updateForm("name", e.target.value)}
+                            name="name"
+                            value={profile.name}
+                            onChange={handleChange}
                             placeholder="Enter your name"
                         />
                     </Form.Group>
@@ -40,8 +47,8 @@ const Profile: React.FC<ProfileData> = () => {
                             type="email"
                             placeholder="Enter your email"
                             name="email"
-                            value={formData.email}
-                            onChange={(e) => updateForm("email", e.target.value)}
+                            value={profile.email}
+                            onChange={handleChange}
                         />
                     </Form.Group>
                 </Col>
@@ -50,19 +57,20 @@ const Profile: React.FC<ProfileData> = () => {
                         <Form.Label>Phone</Form.Label>
                         <PhoneInput
                             placeholder="Enter phone number"
-                            value={formData.phone}
+                            value={profile.phone}
                             onChange={handlePhone} />
                     </Form.Group>
                 </Col>
             </Row>
             <Row>
-            <Col md={4}>
+                <Col md={4}>
                     <Form.Group controlId="formName" className="mb-3">
                         <Form.Label>Role</Form.Label>
                         <Form.Control
                             type="text"
-                            value={formData.role}
-                            onChange={(e) => updateForm("role", e.target.value)}
+                            name="role"
+                            value={profile.role}
+                            onChange={handleChange}
                             placeholder="Enter role/position"
                         />
                     </Form.Group>
@@ -74,17 +82,25 @@ const Profile: React.FC<ProfileData> = () => {
                             type="text"
                             placeholder="Enter your address"
                             name="address"
-                            readOnly
+                            value={profile.address}
+                            onChange={handleChange}
                         />
                     </Form.Group>
                 </Col>
             </Row>
             <Row>
                 <Col md={12}>
-                    <Form.Group className="mb-3" controlId="form.summary">
+                    <Form.Group className="mb-3" controlId="summary">
                         <Form.Label>Summary</Form.Label>
-                        <Form.Control as="textarea" rows={3} value={formData.summary} placeholder="Write a summary of yourself"
-                             onChange={(e) => updateForm("summary", e.target.value)}/>
+
+
+                        <Form.Control
+                            as="textarea" rows={3}
+                            placeholder="Write a summary of yourself"
+                            name="summary"
+                            value={profile.summary}
+                            onChange={handleChange} />
+
                     </Form.Group>
                 </Col>
             </Row>

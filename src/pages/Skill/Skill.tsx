@@ -1,42 +1,33 @@
 import { Form, Button, Row, Col } from "react-bootstrap";
-import React, { useState } from 'react';
-import { useFormContext } from "../../context/FormContext";
-import ListManager from '../../components/ListManager';
-
-interface SkillData {
-
-}
-
-interface SkillItem {
-    id: string;
-    name: string;
-}
+import React from 'react';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { addSkill, updateSkill, deleteSkill } from './SkillSlice';
 
 
+const Skill: React.FC = () => {
 
-const Skill: React.FC<SkillData> = () => {
+    const skills = useAppSelector((state) => state.skill)
+    const dispatch = useAppDispatch();
 
-    const { formData, updateForm } = useFormContext();
-    const [listManager] = useState(
-        new ListManager<SkillItem>([{ id: crypto.randomUUID(), name: "" }])
-    );
+    const addItem = () => {
+        let item = { id: crypto.randomUUID(), name: '' };
+        dispatch(addSkill(item));
 
-    const [skills, setSkills] = useState<SkillItem[]>(listManager.getItems());
-
-    const addSkill = () => {
-        listManager.addItem({ id: crypto.randomUUID(), name: "" });
-        setSkills(listManager.getItems());
-        updateForm("skills", listManager.getItems());
     }
 
-    const updateSkill = (index: number, name: string) => {
-        listManager.updateItem(index, { name });
-        setSkills(listManager.getItems());
-    }
+    const deleteItem = (id: string) => {
+        dispatch(deleteSkill(id));
+    };
 
-    const deleteSkill = (index: number) => {
-        listManager.deleteItem(index);
-        setSkills(listManager.getItems());
+    const handleChange = (id: string, e: any) => {
+        // Retrive name and value attribute from element
+        const { name, value } = e.target;
+
+        dispatch(updateSkill({
+            id,
+            updatedData: { [name]: value },
+        }));
+
     };
 
     return (
@@ -52,14 +43,15 @@ const Skill: React.FC<SkillData> = () => {
                                     <Form.Control
                                         type="text"
                                         placeholder="Enter skill name"
+                                        name="name"
                                         value={skill.name}
-                                        onChange={(e) => updateSkill(index, e.target.value)}
+                                        onChange={(e) => handleChange(skill.id, e)}
                                     />
                                 </Form.Group>
                             </Col>
 
                             <Col md={6}>
-                                <Button variant="danger" onClick={() => deleteSkill(index)}>
+                                <Button variant="danger" onClick={() => deleteItem(skill.id)}>
                                     Delete
                                 </Button>
                             </Col>
@@ -76,7 +68,7 @@ const Skill: React.FC<SkillData> = () => {
                     </ul>
                 </Col>
             </Row>
-            <Button variant="primary" onClick={addSkill}>
+            <Button variant="primary" onClick={addItem}>
                 + Add Skill
             </Button>
 

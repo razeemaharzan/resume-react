@@ -3,8 +3,8 @@ import Profile from "../Profile/Profile";
 import Education from "../Education/Education";
 import Experience from "../Experience/Experience";
 import Skill from "../Skill/Skill";
-import Certification from "../Certification/Certification";
-import Hobbies from "../Hobbies/hobbies";
+import Certificate from "../Certificate/Certificate";
+import Hobbies from "../Hobbies/Hobbies";
 import Interest from "../Interest/Interest";
 import Preview from "../Preview/Preview";
 import { Step } from "../../components/StepNavigation/Step";
@@ -19,7 +19,7 @@ const steps: Step[] = [
   { title: 'Education', content: <Education /> },
   { title: 'Experience', content: <Experience /> },
   { title: 'Skills', content: <Skill /> },
-  { title: 'Certification', content: <Certification /> },
+  { title: 'Certificates', content: <Certificate /> },
   { title: 'Hobbies', content: <Hobbies /> },
   { title: 'Interest', content: <Interest /> },
   { title: 'Preview', content: <Preview></Preview> },

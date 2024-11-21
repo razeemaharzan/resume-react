@@ -14,6 +14,11 @@ export default class ListManager<T extends { id: string }> {
         i === index ? { ...item, ...updatedFields } : item
       );
     }
+    updateItemById(id: string, updatedFields: Partial<T>) {
+      this.items = this.items.map((item, i) =>
+        item.id === id ? { ...item, ...updatedFields } : item
+      );
+    }
   
     deleteItem(index: number) {
       this.items = this.items.filter((_, i) => i !== index);
