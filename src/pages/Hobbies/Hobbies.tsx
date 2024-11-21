@@ -1,11 +1,10 @@
-
 import { Form } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { updateItem } from './InterestSlice';
+import { updateItem } from './HobbiesSlice';
 
 
-const Interest: React.FC = () => {
-    const interest = useAppSelector((state) => state.interest)
+const Hobbies: React.FC = () => {
+    const hobby = useAppSelector((state) => state.hobby)
     const dispatch = useAppDispatch();
 
 
@@ -21,14 +20,12 @@ const Interest: React.FC = () => {
     };
     return (
         <div>
-
             <Form.Group className="mb-3" controlId="form.interests">
-                <Form.Label>Interest</Form.Label>
-                <Form.Control as="textarea" rows={10} placeholder="Write interests"
-                    value={interest.interest}
-                    name="interest"
-                            onChange={(e) => handleChange(interest.id, e)}
-            
+                <Form.Label>Hobbies</Form.Label>
+                <Form.Control as="textarea" rows={10} placeholder="Write hobbies"
+                    value={hobby.hobby}
+                    name="hobby"
+                    onChange={(e) => handleChange(hobby.id, e)}
                 />
             </Form.Group>
         </div>
@@ -37,4 +34,4 @@ const Interest: React.FC = () => {
 
 }
 
-export default Interest
+export default Hobbies

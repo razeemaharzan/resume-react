@@ -1,46 +1,41 @@
 
 import { Form, Button, Row, Col } from "react-bootstrap";
-import React, { useState } from 'react';
-import ListManager from '../../components/ListManager';
-
-interface EducationData {
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { updateEducation, deleteEducation, addNewEducation } from './EducationSlice'
 
 
+const Education: React.FC = () => {
 
-}
-interface EducationItem {
-    id: string;
-    degree: string;
-    fieldOfStudy: string;
-    institution: string;
-    startDate: string;
-    endDate: string;
-}
+    const educations = useAppSelector((state) => state.education)
+    const dispatch = useAppDispatch();
 
 
-const Education: React.FC<EducationData> = () => {
-
-
-    const [listManager] = useState(
-        new ListManager<EducationItem>([{ id: crypto.randomUUID(), degree: "", fieldOfStudy: '', institution: '', startDate: '', endDate: '' }])
-    );
-    const [educations, setEducations] = useState<EducationItem[]>(listManager.getItems());
-
-    const addEducation = () => {
-
-        listManager.addItem({ id: crypto.randomUUID(), degree: "", fieldOfStudy: '', institution: '', startDate: '', endDate: '' });
-        setEducations(listManager.getItems());
+    const addItem = () => {
+        let item = {
+            id:crypto.randomUUID(),
+            degree: '',
+            fieldOfStudy: '',
+            institution: '',
+            startDate: '',
+            endDate: ''
+        };
+        dispatch(addNewEducation(item));
+        
     }
 
-    const updateEducation = (index: number, key: string, data: string) => {
+    const deleteItem = (id: string) => {
+        dispatch(deleteEducation(id));
+    };
 
-        listManager.updateItem(index, { [key]: data });
-        setEducations(listManager.getItems());
-    }
-    const deleteEducation = (index: number) => {
+    const handleChange = (id: string, e: any) => {
+        // Retrive name and value attribute from element
+        const { name, value } = e.target;
 
-        listManager.deleteItem(index);
-        setEducations(listManager.getItems());
+        dispatch(updateEducation({
+            id,
+            updatedData: { [name]: value },
+        }));
+       
     };
 
     return (
@@ -56,7 +51,8 @@ const Education: React.FC<EducationData> = () => {
                                 <Form.Control
                                     type="text"
                                     value={education.institution}
-                                    onChange={(e) => updateEducation(index, "institution", e.target.value)}
+                                    name="institution"
+                                    onChange={(e) => handleChange(education.id, e)}
                                     placeholder="Enter your name"
                                 />
                             </Form.Group>
@@ -68,7 +64,8 @@ const Education: React.FC<EducationData> = () => {
                                 <Form.Control
                                     type="text"
                                     value={education.degree}
-                                    onChange={(e) => updateEducation(index, "degree", e.target.value)}
+                                    name="degree"
+                                    onChange={(e) => handleChange(education.id, e)}
                                     placeholder="Enter your name"
                                 />
                             </Form.Group>
@@ -80,7 +77,8 @@ const Education: React.FC<EducationData> = () => {
                                 <Form.Control
                                     type="text"
                                     value={education.fieldOfStudy}
-                                    onChange={(e) => updateEducation(index, "fieldOfStudy", e.target.value)}
+                                    name="fieldOfStudy"
+                                    onChange={(e) => handleChange(education.id, e)}
                                     placeholder="Enter your name"
                                 />
                             </Form.Group>
@@ -94,7 +92,9 @@ const Education: React.FC<EducationData> = () => {
                                 <Form.Control
                                     type="date"
                                     value={education.startDate}
-                                    onChange={(e) => updateEducation(index, "startDate", e.target.value)}
+                                    name="startDate"
+                                   
+                                    onChange={(e) => handleChange(education.id, e)}
                                 />
                             </Form.Group>
                         </Col>
@@ -104,12 +104,13 @@ const Education: React.FC<EducationData> = () => {
                                 <Form.Control
                                     type="date"
                                     value={education.endDate}
-                                    onChange={(e) => updateEducation(index, "endDate", e.target.value)}
+                                    name="endDate"
+                                    onChange={(e) => handleChange(education.id, e)}
                                 />
                             </Form.Group>
                         </Col>
                         <Col md={4}>
-                            <Button variant="danger" key={`delete${index}`} onClick={() => deleteEducation(index)}>
+                            <Button variant="danger" key={`delete${index}`} onClick={() => deleteItem(education.id)}>
                                 Delete
                             </Button>
                         </Col>
@@ -118,7 +119,7 @@ const Education: React.FC<EducationData> = () => {
                 </div>
             ))}
 
-            <Button variant="primary" onClick={addEducation}>
+            <Button variant="primary" onClick={addItem}>
                 + Add Education
             </Button>
 

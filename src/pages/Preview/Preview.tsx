@@ -1,19 +1,20 @@
 
-import { Form, Row, Col, Button, Container } from "react-bootstrap";
+import { Row, Col, Container } from "react-bootstrap";
 import './Preview.css';
-import { useFormContext } from "../../context/FormContext";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 
-interface PreviewData {
+const Preview: React.FC = () => {
 
-}
-
-const Preview: React.FC<PreviewData> = () => {
-
-    const { formData, updateForm } = useFormContext();
-
+    const profile = useSelector((state: RootState) => state.profile);
+    const educations = useSelector((state: RootState) => state.education);
+    const experiences = useSelector((state: RootState) => state.experience);
+    const skills = useSelector((state: RootState) => state.skill);
+    const hobby = useSelector((state: RootState) => state.hobby);
+    const interest = useSelector((state: RootState) => state.interest);
     return (
         <div>
-
+            <button>Download PDF</button>
             <Container id="resume">
                 <Row>
                     {/* <!-- Left Column --> */}
@@ -23,13 +24,13 @@ const Preview: React.FC<PreviewData> = () => {
                         <Row>
                             <Col md={12} >
 
-                                <h1 className="font-weight"> {formData.name}
+                                <h1 className="font-weight"> {profile.name}
                                 </h1>
                             </Col>
                         </Row>
                         <Row>
                             <Col md={12} >
-                                <h4 className="font-weight">{formData.role}
+                                <h4 className="font-weight">{profile.role}
                                 </h4>
                             </Col>
                         </Row>
@@ -40,10 +41,9 @@ const Preview: React.FC<PreviewData> = () => {
                         </Row>
                         <Row>
                             <Col md={12} >
-                                <p><strong>Address: </strong></p>
-                                <p><strong>{formData.address.country}</strong></p>
-                                <p><strong>Phone:</strong> {formData.phone}</p>
-                                <p><strong>Email:</strong> {formData.email}</p>
+                                <p><strong>Address: {profile.address}</strong></p>
+                                <p><strong>Phone:</strong> {profile.phone}</p>
+                                <p><strong>Email:</strong> {profile.email}</p>
                             </Col>
                         </Row>
                         {/* <!-- Skills --> */}
@@ -51,9 +51,9 @@ const Preview: React.FC<PreviewData> = () => {
                         <Row>
                             <h5 className="section-title">Skills</h5>
                             <ul>
-                                {/* {formData.skills.map((skill, index) => (
-                                    <li>{skill}</li>
-                                ))} */}
+                                {skills.map((skill) => (
+                                    <li key={skill.id}>{skill.name}</li>
+                                ))}
                             </ul>
                         </Row>
                     </Col>
@@ -62,72 +62,67 @@ const Preview: React.FC<PreviewData> = () => {
                     <Col md={8} className="right-column ">
                         {/* <!-- Summary --> */}
 
-                        <p>{formData.summary}
+                        <p>{profile.summary}
                         </p>
                         {/* <!-- Work History --> */}
                         <h5 className="resume-heading">Work History</h5>
-                        <div>
+                        {experiences.map((experience) => (
+                            <div key={experience.id}>
 
-                            <Row className=" work-history-detail">
-                                <Col md={2}>
-                                    <p>Aug 2023 - Present</p>
-                                </Col>
-                                <Col md={10}>
-                                    <h4>Software Developer</h4>
-                                    <p><em>Company: Workharu, Location: Remote</em></p>
-                                    <p className="text-center font-weight heading-color"> Project - Real estate management system (Trusty Group
-                                        Realty)</p>
-                                    <h5>Major Duties</h5>
-                                    <ul>
-                                        <li>Lead the development of custom software solutions, including a Rental Management System, by
-                                            collaborating closely with
-                                            clients to gather and clarify requirements.
-                                        </li>
+                                <Row className=" work-history-detail">
+                                    <Col md={2}>
+                                        <p> {`${experience.startDate}`} - {experience.endDate}</p>
+                                    </Col>
+                                    <Col md={10}>
+                                        <h4>{experience.position}</h4>
+                                        <p><em>Company: {experience.companyName}, Location: {experience.location}</em></p>
+                                        <p className="text-center font-weight heading-color">{experience.heading}</p>
+                                        <h5>Major Duties</h5>
+                                        <ul>
+                                            <li>{experience.majorDuties}
+                                            </li>
 
-                                    </ul>
-                                    <h5>Achievements</h5>
-                                    <ul>
-                                        <li>Successfully led development of rental Management System, translating client requirements into
-                                            scalable solutions using
-                                            Java for backend and AngularJS/Angular 8+ for the frontend, ensuring on-time delivery.
-                                        </li>
+                                        </ul>
+                                        <h5>Achievements</h5>
+                                        <ul>
+                                            <li>{experience.achievements}
+                                            </li>
 
-                                    </ul>
-                                    <p><b>Technologies Involved</b> - Java, Springboot Framework, Angular 8, Cypress, Mysql, HTML, CSS</p>
-                                </Col>
-                            </Row>
+                                        </ul>
+                                        <p><i>{experience.notes}</i></p>
+                                    </Col>
+                                </Row>
 
-                        </div>
+                            </div>
+                        ))}
 
                         {/* <!-- Education content start --> */}
                         <h5 className="resume-heading">Education</h5>
-                        <Row className="row">
-                            <Col md={2}>
-                                <p>Oct 2012 - Aug 2016</p>
-                            </Col>
-                            <Col md={10}>
-                                <h6>National College of Computer Studies</h6>
-                                <p><em>Bachelor in Information Management</em></p>
-                            </Col>
+                        {educations.map((education) => (
+                            <div key={education.id}>
+                                <Row className="row">
+                                    <Col md={2}>
+                                        <p>{education.startDate} - {education.endDate} </p>
+                                    </Col>
+                                    <Col md={10}>
+                                        <h6>{education.institution}</h6>
+                                        <p><em>{education.degree}</em></p>
+                                    </Col>
 
-                        </Row>
-                        <Row className="row">
-                            <Col md={2}>
-                                <p>Jul 2022 - May 2024</p>
-                            </Col>
-                            <Col md={10}>
-                                <h6>University of Southern Queensland</h6>
-                                <p><em>Masters of Information Systems</em></p>
-                            </Col>
+                                </Row>
+                            </div>
+                        ))}
 
-                        </Row>
                         {/* <!-- Interests --> */}
                         <h5 className="resume-heading">Interests</h5>
-                        <p>{formData.interests}</p>
+                        <p>{interest.interest}</p>
 
                         {/* <!-- Hobbies --> */}
                         <h5 className="resume-heading">Hobbies</h5>
-                        <p>{formData.hobbies}</p>
+
+                        <p>{hobby.hobby}</p>
+
+
                     </Col>
                 </Row>
             </Container>
