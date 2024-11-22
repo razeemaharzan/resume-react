@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
-import { ProgressBar, ButtonGroup, Button, Row } from 'react-bootstrap';
+import React, { useState} from 'react';
+import { ProgressBar, ButtonGroup, Button } from 'react-bootstrap';
 import { Step } from './Step'
 import Card from 'react-bootstrap/Card';
 
-const StepNavigation: React.FC<{ steps: Step[] }> = ({ steps }) => {
+import Row from 'react-bootstrap/Row';
+
+const StepNavigation : React.FC< {steps: Step[]}> =({steps}  ) => {
     // Navigation current step
     const [currentStep, setCurrentStep] = useState<number>(0);
 
@@ -69,8 +71,8 @@ const StepNavigation: React.FC<{ steps: Step[] }> = ({ steps }) => {
                     Previous
                 </Button>
 
-                
-                 <Button variant="primary" onClick={currentStep < steps.length - 1 ? handleNext : handleSubmit}>
+
+                <Button variant="primary" onClick={currentStep < steps.length - 1 ? handleNext : handleSubmit}>
                     {currentStep < steps.length - 1 ? (<span> Next</span>) : (<span> Submit</span>)}
                 </Button>
             </div>

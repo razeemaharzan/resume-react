@@ -8,12 +8,14 @@ import Hobbies from "../Hobbies/Hobbies";
 import Interest from "../Interest/Interest";
 import Preview from "../Preview/Preview";
 import { Step } from "../../components/StepNavigation/Step";
-import React from 'react';
 import Form from 'react-bootstrap/Form';
-import { FormProvider } from "../../context/FormContext";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button'
+import generatePDF from 'react-to-pdf';
+import { useRef } from 'react';
 
+import { RefContext } from "../../context/RefContext";
 const steps: Step[] = [
   { title: 'Profile', content: <Profile /> },
   { title: 'Education', content: <Education /> },
@@ -26,10 +28,14 @@ const steps: Step[] = [
 ];
 
 const Home: React.FC<any> = () => {
+
+  const contentRef = useRef<HTMLDivElement | null>(null);
+
   return (
     <div>
+      <Button variant="primary" className="mb-3" onClick={() => generatePDF(contentRef, { filename: 'page.pdf' })}>Download PDF</Button>
 
-      <FormProvider>
+      <RefContext.Provider value={contentRef}>
         <Form>
           <Row className="justify-content-md-center">
             <Col>
@@ -38,10 +44,9 @@ const Home: React.FC<any> = () => {
           </Row>
 
         </Form>
-      </FormProvider>
+      </RefContext.Provider>
 
-    </div >
-
+    </div>
   );
 
 }

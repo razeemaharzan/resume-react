@@ -1,8 +1,10 @@
 
+import React from "react";
 import { Row, Col, Container } from "react-bootstrap";
-import './Preview.css';
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
+import { useRefContext } from "../../context/RefContext";
+import './Preview.css';
 
 const Preview: React.FC = () => {
 
@@ -12,10 +14,20 @@ const Preview: React.FC = () => {
     const skills = useSelector((state: RootState) => state.skill);
     const hobby = useSelector((state: RootState) => state.hobby);
     const interest = useSelector((state: RootState) => state.interest);
+    const ref = useRefContext();
+
+    const getFormattedDate = (date: string) => {
+        if (date) {
+            let dt = new Date(date);
+            return dt.toLocaleString('en-EN', { month: "short", year: "numeric" });
+        }
+
+    }
+
     return (
-        <div>
-            <button>Download PDF</button>
-            <Container id="resume">
+        <div ref={ref}>
+
+            <Container id="resume" className="fluid">
                 <Row>
                     {/* <!-- Left Column --> */}
                     <Col md={4} className="left-column text-white">
@@ -71,7 +83,8 @@ const Preview: React.FC = () => {
 
                                 <Row className=" work-history-detail">
                                     <Col md={2}>
-                                        <p> {`${experience.startDate}`} - {experience.endDate}</p>
+                                        <span> {getFormattedDate(experience.startDate)} - <br/>
+                                              {getFormattedDate(experience.endDate)}</span>
                                     </Col>
                                     <Col md={10}>
                                         <h4>{experience.position}</h4>
@@ -89,7 +102,7 @@ const Preview: React.FC = () => {
                                             </li>
 
                                         </ul>
-                                        <p><i>{experience.notes}</i></p>
+                                        <span><i>{experience.notes}</i></span>
                                     </Col>
                                 </Row>
 
@@ -102,11 +115,11 @@ const Preview: React.FC = () => {
                             <div key={education.id}>
                                 <Row className="row">
                                     <Col md={2}>
-                                        <p>{education.startDate} - {education.endDate} </p>
+                                        <span>{getFormattedDate(education.startDate)} - <br/> {getFormattedDate(education.endDate)} </span>
                                     </Col>
                                     <Col md={10}>
                                         <h6>{education.institution}</h6>
-                                        <p><em>{education.degree}</em></p>
+                                        <span><em>{education.degree}</em></span>
                                     </Col>
 
                                 </Row>
