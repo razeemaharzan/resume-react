@@ -133,7 +133,7 @@ const Experience: React.FC<ExperienceData> = () => {
                                 <Form.Control
                                     type="date"
                                     value={experience.endDate}
-                                    name="startDate"
+                                    name="endDate"
                                     onChange={(e) => handleChange(experience.id, e)}
                                 />
                             </Form.Group>
